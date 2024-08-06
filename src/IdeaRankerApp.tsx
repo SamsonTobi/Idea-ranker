@@ -43,7 +43,7 @@ interface Idea {
   simplicity: number;
   practicality: number;
   appeal: number;
-  gutFeeling: number;
+  gutfeeling: number;
 }
 
 interface StoredUser {
@@ -65,28 +65,35 @@ const NewIdeaModal: React.FC<{
     simplicity: 0,
     practicality: 0,
     appeal: 0,
-    gutFeeling: 0,
+    gutfeeling: 0,
   });
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const ratingAttributes = [
+    "simplicity",
+    "practicality",
+    "appeal",
+    "gutfeeling",
+  ];
 
   const handleSubmit = () => {
+    console.log("New Idea State Before Submission:", newIdea);
     if (newIdea.title.trim() === "" || newIdea.shortDescription.trim() === "") {
       setToastMessage("Idea name and short description are required.");
       setShowToast(true);
       return;
     }
-  
-    const isFormUnchanged = 
+
+    const isFormUnchanged =
       newIdea.title === "" &&
       newIdea.shortDescription === "" &&
       newIdea.fullDescription === "" &&
       newIdea.simplicity === 0 &&
       newIdea.practicality === 0 &&
       newIdea.appeal === 0 &&
-      newIdea.gutFeeling === 0;
-  
+      newIdea.gutfeeling === 0;
+
     if (isFormUnchanged) {
       setToastMessage("You haven't written anything yet.");
       setShowToast(true);
@@ -94,12 +101,9 @@ const NewIdeaModal: React.FC<{
     }
 
     // Calculate the rating based on slider values
-    const totalScore =
-      newIdea.simplicity +
-      newIdea.practicality +
-      newIdea.appeal +
-      newIdea.gutFeeling;
-    const rating = (totalScore / 400) * 5; // Convert to a 0-5 scale
+    const totalScore = ratingAttributes.reduce((sum, attribute) => 
+      sum + (Number(newIdea[attribute as keyof Idea]) || 0), 0);
+    const rating = (totalScore / (ratingAttributes.length * 100)) * 5; // Convert to a 0-5 scale
     const roundedRating = Math.round(rating * 10) / 10; // Round to one decimal place
 
     const ideaWithRating = { ...newIdea, rating: roundedRating };
@@ -122,12 +126,12 @@ const NewIdeaModal: React.FC<{
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
-      <button
-  onClick={onClose}
-  className="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200"
->
-  <X className="text-black" size={24} />
-</button>
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200"
+        >
+          <X className="text-black" size={24} />
+        </button>
         <h2 className="text-2xl text-black font-bold mb-4">New Idea</h2>
         <div>
           <div className="mb-4">
@@ -176,27 +180,28 @@ const NewIdeaModal: React.FC<{
             <Mic className="mr-2 text-black" />
             <span className="text-sm text-black">or record a voice note</span>
           </div>
-          {["Simplicity", "Practicality", "Appeal", "Gut feeling"].map(
-            (label) => (
-              <div key={label} className="mb-4">
+          {ratingAttributes.map((label) => {
+            const key = label.toLowerCase().replace(" ", "");
+            return (
+              <div key={key} className="mb-4">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm text-black font-medium">{label}</label>
+                  <label className="text-sm text-black font-medium">
+                    {label}
+                  </label>
                   <AlertCircle className="w-4 h-4 text-gray-400" />
                 </div>
                 <input
                   type="range"
-                  name={label.toLowerCase().replace(" ", "")}
-                  value={
-                    newIdea[label.toLowerCase().replace(" ", "") as keyof Idea]
-                  }
+                  name={key}
+                  value={newIdea[key as keyof Idea] || 0}
                   onChange={handleRangeChange}
                   className="w-full"
                   min="0"
                   max="100"
                 />
               </div>
-            )
-          )}
+            );
+          })}
           <button
             onClick={handleSubmit}
             className="w-full bg-black text-white py-2 rounded-full font-semibold mt-4"
@@ -206,13 +211,13 @@ const NewIdeaModal: React.FC<{
         </div>
       </div>
       {showToast && (
-            <Toast
-              variant="destructive"
-              title="Error"
-              description={toastMessage}
-              onClose={() => setShowToast(false)}
-            />
-          )}
+        <Toast
+          variant="destructive"
+          title="Error"
+          description={toastMessage}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </div>
   );
 };
@@ -335,7 +340,7 @@ const SandboxDashboard: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex font-SF flex-col h-screen bg-gray-100">
       <header className="bg-white p-4 flex justify-between items-center">
         <Menu className="w-6 h-6" />
         <div className="flex items-center">
@@ -370,12 +375,19 @@ const SandboxDashboard: React.FC = () => {
                   <div className="flex-1">
                     <h3 className="text-lg text-black font-semibold">
                       {idea.title}{" "}
-                      <span className="text-orange-500">
-                        🔥{" "}
-                        {idea.rating !== undefined
-                          ? idea.rating.toFixed(1)
-                          : "N/A"}
-                      </span>
+                      {idea.rating !== undefined && idea.rating >= 2 ? (
+                        <span className="text-orange-500 text-xs">
+                          🔥 {idea.rating.toFixed(1)}
+                        </span>
+                      ) : idea.rating !== 0 ? (
+                        <span className="text-gray-400 text-xs">
+                          {idea.rating.toFixed(1)}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-xs">
+                          Not rated yet
+                        </span>
+                      )}
                     </h3>
                     <p className="text-gray-600">{idea.shortDescription}</p>
                   </div>

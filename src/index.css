@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'SF-Rounded';
+  src: url('assets/fonts/SF-PRO-ROUNDED-REGULAR.OTF');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF-Rounded';
+  src: url('assets/fonts/SF-PRO-ROUNDED-MEDIUM.OTF');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'SF-Rounded';
+  src: url('assets/fonts/SF-PRO-ROUNDED-BOLD.OTF');
+  font-weight: 900;
+  font-style: normal;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
