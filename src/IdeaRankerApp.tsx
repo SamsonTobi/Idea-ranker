@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { X, Menu, Mic, AlertCircle } from "lucide-react";
 import { initializeApp } from "firebase/app";
-import emptyStateIcon from "./assets/empty-state-illus.png"
+import emptyStateIcon from "./assets/empty-state-illus.png";
+import "./sandbox.scss";
 import {
   getAuth,
   signInWithPopup,
@@ -72,14 +73,13 @@ const NewIdeaModal: React.FC<{
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const ratingAttributes = [
-    "simplicity",
-    "practicality",
-    "appeal",
-    "gutfeeling",
+    "Simplicity",
+    "Practicality",
+    "Appeal",
+    "Gut feeling",
   ];
 
   const handleSubmit = () => {
-    console.log("New Idea State Before Submission:", newIdea);
     if (newIdea.title.trim() === "" || newIdea.shortDescription.trim() === "") {
       setToastMessage("Idea name and short description are required.");
       setShowToast(true);
@@ -102,9 +102,12 @@ const NewIdeaModal: React.FC<{
     }
 
     // Calculate the rating based on slider values
-    const totalScore = ratingAttributes.reduce((sum, attribute) => 
-      sum + (Number(newIdea[attribute as keyof Idea]) || 0), 0);
-    const rating = (totalScore / (ratingAttributes.length * 100)) * 5; // Convert to a 0-5 scale
+    const totalScore =
+      newIdea.simplicity +
+      newIdea.practicality +
+      newIdea.appeal +
+      newIdea.gutfeeling;
+    const rating = (totalScore / 400) * 5; // Convert to a 0-5 scale
     const roundedRating = Math.round(rating * 10) / 10; // Round to one decimal place
 
     const ideaWithRating = { ...newIdea, rating: roundedRating };
@@ -123,6 +126,18 @@ const NewIdeaModal: React.FC<{
     const { name, value } = e.target;
     setNewIdea((prev) => ({ ...prev, [name]: parseInt(value) }));
   };
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const slider = e.target;
+    const value = (Number(slider.value) - Number(slider.min)) / (Number(slider.max) - Number(slider.min));
+  
+    // Calculate the scale factor based on the slider value
+    let scale = (1 - value).toString();
+  
+    // Apply the scale to the ::before element
+    slider.style.setProperty('--slider-scale', scale);
+  };
+  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -196,9 +211,10 @@ const NewIdeaModal: React.FC<{
                   name={key}
                   value={newIdea[key as keyof Idea] || 0}
                   onChange={handleRangeChange}
-                  className="w-full"
+                  className="w-full gradient-slider"
                   min="0"
                   max="100"
+                  onInput={handleInput}
                 />
               </div>
             );
@@ -364,33 +380,44 @@ const SandboxDashboard: React.FC = () => {
       <main className="flex-1 py-6 px-3 overflow-auto sm:p-6">
         <h2 className="text-gray-500 text-sm mb-2">HELLO!</h2>
         <h1 className="text-3xl text-black font-bold mb-6">
-        {user.displayName?.split(' ')[0] || 'User'}, {ideas.length == 0 ? 'add your first idea to the sandbox' : ideas.length > 0 && 'ready to add ideas to the sandbox?'}
+          {user.displayName?.split(" ")[0] || "User"},{" "}
+          {ideas.length == 0
+            ? "add your first idea to the sandbox"
+            : ideas.length > 0 && "ready to add ideas to the sandbox?"}
         </h1>
 
-        <div className={` ${ideas.length == 0 && `bg-none shadow-none`} bg-white rounded-lg shadow-md p-6`}>
+        <div
+          className={` ${
+            ideas.length == 0 && `bg-none shadow-none`
+          } bg-white rounded-lg shadow-md p-6`}
+        >
           {ideas.length > 0 ? (
             ideas.map((idea, index) => (
               <div key={idea.id} className="mb-4 last:mb-0">
                 <div className="flex items-start">
-                  <div className="text-5xl text-gray-300 mr-4">{index + 1}</div>
+                  <div className="text-5xl font-medium text-gray-300 mr-4">
+                    {index + 1}
+                  </div>
                   <div className="flex-1">
-                    <h3 className="text-lg text-black font-semibold">
+                    <h3 className="text-base text-black font-semibold">
                       {idea.title}{" "}
-                      {idea.rating !== undefined && idea.rating >= 2 ? (
-                        <span className="text-orange-500 text-xs">
+                      {idea.rating !== undefined && idea.rating >= 2 && index < 3 ? (
+                        <span className="pl-1 text-orange-500 text-xs">
                           🔥 {idea.rating.toFixed(1)}
                         </span>
                       ) : idea.rating !== 0 ? (
-                        <span className="text-gray-400 text-xs">
+                        <span className="pl-1 text-gray-400 text-xs">
                           {idea.rating.toFixed(1)}
                         </span>
                       ) : (
-                        <span className="text-gray-400 text-xs">
+                        <span className="pl-1 text-gray-400 text-xs">
                           Not rated yet
                         </span>
                       )}
                     </h3>
-                    <p className="text-gray-600">{idea.shortDescription}</p>
+                    <p className="text-gray-600 text-sm">
+                      {idea.shortDescription}
+                    </p>
                   </div>
                 </div>
                 {index < ideas.length - 1 && <hr className="my-4" />}
@@ -398,11 +425,18 @@ const SandboxDashboard: React.FC = () => {
             ))
           ) : ideas.length == 0 ? (
             <div className="w-full py-6 flex flex-col items-center">
-              <img className="h-[120px] mb-4" src={emptyStateIcon} alt="Empty ideas list" />
-              <p className="text-gray-500 text-center text-sm">Hey, you have no ideas here yet. <br/>Put down your ideas, then take actions fast</p>
+              <img
+                className="h-[120px] mb-4"
+                src={emptyStateIcon}
+                alt="Empty ideas list"
+              />
+              <p className="text-gray-500 text-center text-sm">
+                Hey, you have no ideas here yet. <br />
+                Put down your ideas, then take actions fast
+              </p>
             </div>
           ) : (
-          <p className="text-gray-500">Loading...</p>
+            <p className="text-gray-500">Loading...</p>
           )}
         </div>
       </main>
