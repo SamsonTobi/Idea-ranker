@@ -129,15 +129,16 @@ const NewIdeaModal: React.FC<{
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const slider = e.target;
-    const value = (Number(slider.value) - Number(slider.min)) / (Number(slider.max) - Number(slider.min));
-  
+    const value =
+      (Number(slider.value) - Number(slider.min)) /
+      (Number(slider.max) - Number(slider.min));
+
     // Calculate the scale factor based on the slider value
     let scale = (1 - value).toString();
-  
+
     // Apply the scale to the ::before element
-    slider.style.setProperty('--slider-scale', scale);
+    slider.style.setProperty("--slider-scale", scale);
   };
-  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -201,9 +202,7 @@ const NewIdeaModal: React.FC<{
             return (
               <div key={key} className="mb-4">
                 <div className="flex justify-between items-center">
-                  <label className="text text-black font-medium">
-                    {label}
-                  </label>
+                  <label className="text text-black font-medium">{label}</label>
                   <AlertCircle className="w-4 h-4 text-gray-400" />
                 </div>
                 <input
@@ -221,7 +220,7 @@ const NewIdeaModal: React.FC<{
           })}
           <button
             onClick={handleSubmit}
-            className="w-full bg-black text-white py-2 rounded-full font-semibold mt-4"
+            className="button w-full bg-black text-white py-2 rounded-full font-semibold mt-4"
           >
             + Add new idea
           </button>
@@ -401,7 +400,9 @@ const SandboxDashboard: React.FC = () => {
                   <div className="flex-1">
                     <h3 className="text-base text-black font-semibold">
                       {idea.title}{" "}
-                      {idea.rating !== undefined && idea.rating >= 2 && index < 3 ? (
+                      {idea.rating !== undefined &&
+                      idea.rating >= 2 &&
+                      index < 3 ? (
                         <span className="pl-1 text-orange-500 text-xs">
                           🔥 {idea.rating.toFixed(1)}
                         </span>
@@ -434,6 +435,12 @@ const SandboxDashboard: React.FC = () => {
                 Hey, you have no ideas here yet. <br />
                 Put down your ideas, then take actions fast
               </p>
+              <button
+                onClick={() => setShowModal(true)}
+                className="button w-4/5 mt-5 bg-black text-white py-3 rounded-full font-semibold flex items-center justify-center"
+              >
+                + Add new idea
+              </button>
             </div>
           ) : (
             <p className="text-gray-500">Loading...</p>
@@ -442,12 +449,14 @@ const SandboxDashboard: React.FC = () => {
       </main>
 
       <footer className="p-6">
-        <button
-          onClick={() => setShowModal(true)}
-          className="w-full bg-black text-white py-3 rounded-full font-semibold flex items-center justify-center"
-        >
-          + Add new idea
-        </button>
+        {ideas.length > 0 && (
+          <button
+            onClick={() => setShowModal(true)}
+            className="button w-full bg-black text-white py-3 rounded-full font-semibold flex items-center justify-center"
+          >
+            + Add new idea
+          </button>
+        )}
       </footer>
 
       {showModal && (
