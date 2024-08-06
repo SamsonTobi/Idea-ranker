@@ -361,7 +361,7 @@ const SandboxDashboard: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 py-2 px-6 overflow-auto sm:p-3">
+      <main className="flex-1 py-6 px-3 overflow-auto sm:p-6">
         <h2 className="text-gray-500 text-sm mb-2">HELLO!</h2>
         <h1 className="text-3xl text-black font-bold mb-6">
         {user.displayName?.split(' ')[0] || 'User'}, {ideas.length == 0 ? 'add your first idea to the sandbox' : ideas.length > 0 && 'ready to add ideas to the sandbox?'}
