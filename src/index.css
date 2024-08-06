@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'SF-Rounded';
+  src: url('assets/fonts/SF-PRO-ROUNDED-REGULAR.OTF');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF-Rounded';
+  src: url('assets/fonts/SF-PRO-ROUNDED-MEDIUM.OTF');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'SF-Rounded';
+  src: url('assets/fonts/SF-PRO-ROUNDED-BOLD.OTF');
+  font-weight: 900;
+  font-style: normal;
+}
+
+.font-SF {
+  font-family: 'SF-Rounded', sans-serif;
+}
+
+.font-medium {
+  font-weight: 700;
+}
+.font-bold {
+  font-weight: 900;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
