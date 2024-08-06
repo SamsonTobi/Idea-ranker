@@ -37,6 +37,7 @@
 .gradient-slider {
   position: relative;
   border-radius: 5px;
+  transform-style: preserve-3d;
 
   &::-webkit-slider-runnable-track,
   &::-moz-range-track {

@@ -389,7 +389,7 @@ const SandboxDashboard: React.FC = () => {
         <div
           className={` ${
             ideas.length == 0 && `bg-none shadow-none`
-          } bg-white rounded-lg shadow-md p-6`}
+          } bg-white rounded-2xl shadow-md p-6`}
         >
           {ideas.length > 0 ? (
             ideas.map((idea, index) => (
