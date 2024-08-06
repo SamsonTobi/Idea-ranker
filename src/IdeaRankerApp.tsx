@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Menu, Mic, AlertCircle } from "lucide-react";
 import { initializeApp } from "firebase/app";
+import emptyStateIcon from "./assets/empty-state-illus.png"
 import {
   getAuth,
   signInWithPopup,
@@ -366,7 +367,7 @@ const SandboxDashboard: React.FC = () => {
           {user.displayName}, ready to add ideas to the sandbox?
         </h1>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className={` ${ideas.length == 0 && `bg-none shadow-none`} bg-white rounded-lg shadow-md p-6`}>
           {ideas.length > 0 ? (
             ideas.map((idea, index) => (
               <div key={idea.id} className="mb-4 last:mb-0">
@@ -395,8 +396,13 @@ const SandboxDashboard: React.FC = () => {
                 {index < ideas.length - 1 && <hr className="my-4" />}
               </div>
             ))
+          ) : ideas.length == 0 ? (
+            <div className="w-full py-6 flex flex-col items-center">
+              <img className="h-[120px] mb-4" src={emptyStateIcon} alt="Empty ideas list" />
+              <p className="text-gray-500 text-center text-sm">Hey, you have no ideas here yet. <br/>Put down your ideas, then take actions fast</p>
+            </div>
           ) : (
-            <p className="text-black">No ideas yet. Add your first idea!</p>
+          <p className="text-gray-500">Loading...</p>
           )}
         </div>
       </main>
