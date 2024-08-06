@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, Mic, AlertCircle } from "lucide-react";
+import { X, Menu, Mic, AlertCircle } from "lucide-react";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -7,6 +7,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signOut,
+  User,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -16,16 +17,17 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import Toast from "./components/Toast";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyBibBf1rCwT_GPBkvYuBBRlT2a3-OWx1M8",
+  authDomain: "simple-idea-ranker.firebaseapp.com",
+  projectId: "simple-idea-ranker",
+  storageBucket: "simple-idea-ranker.appspot.com",
+  messagingSenderId: "487526503239",
+  appId: "1:487526503239:web:4839a3e677f565b604b262",
+  measurementId: "G-L5XGC7ZE3V",
 };
 
 // Initialize Firebase
@@ -34,7 +36,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 interface Idea {
-  id?: string; // Changed to string to accommodate Firestore document ID
+  id?: string;
   title: string;
   shortDescription: string;
   fullDescription: string;
@@ -43,6 +45,13 @@ interface Idea {
   practicality: number;
   appeal: number;
   gutFeeling: number;
+}
+
+interface StoredUser {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
 }
 
 const NewIdeaModal: React.FC<{
@@ -54,13 +63,37 @@ const NewIdeaModal: React.FC<{
     shortDescription: "",
     fullDescription: "",
     rating: 0,
-    simplicity: 50,
-    practicality: 50,
-    appeal: 50,
-    gutFeeling: 50,
+    simplicity: 0,
+    practicality: 0,
+    appeal: 0,
+    gutFeeling: 0,
   });
 
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
   const handleSubmit = () => {
+    if (newIdea.title.trim() === "" || newIdea.shortDescription.trim() === "") {
+      setToastMessage("Idea name and short description are required.");
+      setShowToast(true);
+      return;
+    }
+  
+    const isFormUnchanged = 
+      newIdea.title === "" &&
+      newIdea.shortDescription === "" &&
+      newIdea.fullDescription === "" &&
+      newIdea.simplicity === 0 &&
+      newIdea.practicality === 0 &&
+      newIdea.appeal === 0 &&
+      newIdea.gutFeeling === 0;
+  
+    if (isFormUnchanged) {
+      setToastMessage("You haven't written anything yet.");
+      setShowToast(true);
+      return;
+    }
+
     // Calculate the rating based on slider values
     const totalScore =
       newIdea.simplicity +
@@ -89,11 +122,17 @@ const NewIdeaModal: React.FC<{
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+      <button
+  onClick={onClose}
+  className="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200"
+>
+  <X className="text-black" size={24} />
+</button>
         <h2 className="text-2xl text-black font-bold mb-4">New Idea</h2>
         <div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-black text-sm font-medium mb-1">
               Name of your idea
             </label>
             <input
@@ -101,13 +140,13 @@ const NewIdeaModal: React.FC<{
               name="title"
               value={newIdea.title}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 text-black bg-gray-100 border rounded"
               placeholder="Idea ranker, email sender e.t.c"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-black text-sm font-medium mb-1">
               Short description
             </label>
             <input
@@ -115,35 +154,35 @@ const NewIdeaModal: React.FC<{
               name="shortDescription"
               value={newIdea.shortDescription}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 text-black bg-gray-100 border rounded"
               placeholder="A short pitch to potential users"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-black text-sm font-medium mb-1">
               Full description
             </label>
             <textarea
               name="fullDescription"
               value={newIdea.fullDescription}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 bg-gray-100 text-black border rounded"
               placeholder="Write notes about the details of your idea here...."
               rows={3}
               required
             />
           </div>
           <div className="mb-4 flex items-center">
-            <Mic className="mr-2" />
-            <span className="text-sm">or record a voice note</span>
+            <Mic className="mr-2 text-black" />
+            <span className="text-sm text-black">or record a voice note</span>
           </div>
           {["Simplicity", "Practicality", "Appeal", "Gut feeling"].map(
             (label) => (
               <div key={label} className="mb-4">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium">{label}</label>
-                  <AlertCircle className="w-4 h-4" />
+                  <label className="text-sm text-black font-medium">{label}</label>
+                  <AlertCircle className="w-4 h-4 text-gray-400" />
                 </div>
                 <input
                   type="range"
@@ -167,6 +206,14 @@ const NewIdeaModal: React.FC<{
           </button>
         </div>
       </div>
+      {showToast && (
+            <Toast
+              variant="destructive"
+              title="Error"
+              description={toastMessage}
+              onClose={() => setShowToast(false)}
+            />
+          )}
     </div>
   );
 };
@@ -174,31 +221,40 @@ const NewIdeaModal: React.FC<{
 const SandboxDashboard: React.FC = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<StoredUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser: StoredUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      fetchIdeas(parsedUser.uid);
+    }
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setLoading(true);
-      if (user) {
-        // Check if user object exists in localStorage
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          // User was previously logged in, set user state from localStorage
-          setUser(JSON.parse(storedUser));
-        } else {
-          // User is newly logged in, set user state from Firebase
-          setUser(user);
-        }
-        fetchIdeas(user.uid).finally(() => setLoading(false));
+      if (currentUser) {
+        const userData: StoredUser = {
+          uid: currentUser.uid,
+          displayName: currentUser.displayName,
+          email: currentUser.email,
+          photoURL: currentUser.photoURL,
+        };
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+        fetchIdeas(currentUser.uid);
       } else {
         setUser(null);
-        setLoading(false);
+        localStorage.removeItem("user");
+        setIdeas([]);
       }
+      setLoading(false);
     });
-  
+
     return () => unsubscribe();
   }, []);
+
   const fetchIdeas = async (userId: string) => {
     try {
       const q = query(collection(db, "ideas"), where("userId", "==", userId));
@@ -234,21 +290,30 @@ const SandboxDashboard: React.FC = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-  
-      // Store user information in localStorage
-      localStorage.setItem('user', JSON.stringify(user));
-  
+      const userData: StoredUser = {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
     } catch (error) {
       console.error("Error signing in with Google:", error);
     }
   };
-  
 
   const handleSignOut = () => {
-    signOut(auth);
+    signOut(auth)
+      .then(() => {
+        localStorage.removeItem("user");
+        setUser(null);
+        setIdeas([]);
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
   };
 
-  // Show a loading state while checking authentication
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -277,7 +342,7 @@ const SandboxDashboard: React.FC = () => {
         <div className="flex items-center">
           <div className="w-8 h-8 bg-gray-300 rounded-full overflow-hidden">
             <img
-              src={user.photoURL}
+              src={user.photoURL || ""}
               alt="User avatar"
               className="w-full h-full object-cover"
             />
@@ -298,25 +363,30 @@ const SandboxDashboard: React.FC = () => {
         </h1>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          {ideas.map((idea, index) => (
-            <div key={idea.id} className="mb-4 last:mb-0">
-              <div className="flex items-start">
-                <div className="text-5xl text-gray-300 mr-4">
-                  {index + 1}
+          {ideas.length > 0 ? (
+            ideas.map((idea, index) => (
+              <div key={idea.id} className="mb-4 last:mb-0">
+                <div className="flex items-start">
+                  <div className="text-5xl text-gray-300 mr-4">{index + 1}</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg text-black font-semibold">
+                      {idea.title}{" "}
+                      <span className="text-orange-500">
+                        🔥{" "}
+                        {idea.rating !== undefined
+                          ? idea.rating.toFixed(1)
+                          : "N/A"}
+                      </span>
+                    </h3>
+                    <p className="text-gray-600">{idea.shortDescription}</p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-lg text-black font-semibold">
-                    {idea.title}{" "}
-                    <span className="text-orange-500">
-                      🔥 {idea.rating.toFixed(1)}
-                    </span>
-                  </h3>
-                  <p className="text-gray-600">{idea.shortDescription}</p>
-                </div>
+                {index < ideas.length - 1 && <hr className="my-4" />}
               </div>
-              {index < ideas.length - 1 && <hr className="my-4" />}
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-black">No ideas yet. Add your first idea!</p>
+          )}
         </div>
       </main>
 
