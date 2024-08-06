@@ -19,13 +19,13 @@ import {
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBibBf1rCwT_GPBkvYuBBRlT2a3-OWx1M8",
-  authDomain: "simple-idea-ranker.firebaseapp.com",
-  projectId: "simple-idea-ranker",
-  storageBucket: "simple-idea-ranker.appspot.com",
-  messagingSenderId: "487526503239",
-  appId: "1:487526503239:web:4839a3e677f565b604b262",
-  measurementId: "G-L5XGC7ZE3V",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
@@ -90,7 +90,7 @@ const NewIdeaModal: React.FC<{
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">New Idea</h2>
+        <h2 className="text-2xl text-black font-bold mb-4">New Idea</h2>
         <div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">
