@@ -159,7 +159,7 @@ const NewIdeaModal: React.FC<{
               name="title"
               value={newIdea.title}
               onChange={handleInputChange}
-              className="w-full p-2 text-black bg-gray-100 border rounded"
+              className="w-full p-2 text-black bg-gray-100 rounded-lg"
               placeholder="Idea ranker, email sender e.t.c"
               required
             />
@@ -173,12 +173,12 @@ const NewIdeaModal: React.FC<{
               name="shortDescription"
               value={newIdea.shortDescription}
               onChange={handleInputChange}
-              className="w-full p-2 text-black bg-gray-100 border rounded"
+              className="w-full p-2 text-black bg-gray-100 rounded-lg"
               placeholder="A short pitch to potential users"
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-1">
             <label className="block text-black text-sm font-medium mb-1">
               Full description
             </label>
@@ -186,14 +186,14 @@ const NewIdeaModal: React.FC<{
               name="fullDescription"
               value={newIdea.fullDescription}
               onChange={handleInputChange}
-              className="w-full p-2 bg-gray-100 text-black border rounded"
+              className="w-full p-2 bg-gray-100 text-black rounded-lg"
               placeholder="Write notes about the details of your idea here...."
               rows={3}
               required
             />
           </div>
-          <div className="mb-4 flex items-center">
-            <Mic className="mr-2 text-black" />
+          <div className="mb-6 flex items-center">
+            <Mic className="mr-1 text-black text-xs" />
             <span className="text-sm text-black">or record a voice note</span>
           </div>
           {ratingAttributes.map((label) => {
@@ -201,7 +201,7 @@ const NewIdeaModal: React.FC<{
             return (
               <div key={key} className="mb-4">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm text-black font-medium">
+                  <label className="text text-black font-medium">
                     {label}
                   </label>
                   <AlertCircle className="w-4 h-4 text-gray-400" />
