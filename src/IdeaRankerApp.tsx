@@ -437,7 +437,7 @@ const SandboxDashboard: React.FC = () => {
               </p>
               <button
                 onClick={() => setShowModal(true)}
-                className="button w-4/5 mt-6 bg-black text-white py-3 rounded-full font-semibold flex items-center justify-center"
+                className="button sm:w-full w-4/5 mt-6 bg-black text-white py-3 rounded-full font-semibold flex items-center justify-center"
               >
                 + Add new idea
               </button>
