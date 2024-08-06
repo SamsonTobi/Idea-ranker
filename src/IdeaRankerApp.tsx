@@ -181,17 +181,24 @@ const SandboxDashboard: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(true);
       if (user) {
-        setUser(user);
+        // Check if user object exists in localStorage
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          // User was previously logged in, set user state from localStorage
+          setUser(JSON.parse(storedUser));
+        } else {
+          // User is newly logged in, set user state from Firebase
+          setUser(user);
+        }
         fetchIdeas(user.uid).finally(() => setLoading(false));
       } else {
         setUser(null);
         setLoading(false);
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
-
   const fetchIdeas = async (userId: string) => {
     try {
       const q = query(collection(db, "ideas"), where("userId", "==", userId));
@@ -225,11 +232,17 @@ const SandboxDashboard: React.FC = () => {
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+  
+      // Store user information in localStorage
+      localStorage.setItem('user', JSON.stringify(user));
+  
     } catch (error) {
       console.error("Error signing in with Google:", error);
     }
   };
+  
 
   const handleSignOut = () => {
     signOut(auth);
