@@ -410,8 +410,8 @@ const SandboxDashboard: React.FC = () => {
   }
 
   return (
-    <div className="flex font-SF flex-col h-screen bg-gray-100">
-      <header className="bg-white p-4 flex justify-between items-center">
+    <div className="flex font-SF flex-col h-screen bg-gray-100 items-center">
+      <header className="bg-white p-4 flex justify-between items-center w-full">
         <Menu className="w-6 h-6" />
         <div className="flex items-center">
           <div className="w-8 h-8 bg-gray-300 rounded-full overflow-hidden">
@@ -430,7 +430,7 @@ const SandboxDashboard: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 py-6 px-3 overflow-auto sm:p-6">
+      <main className="flex-1 py-6 px-3 overflow-auto max-w-2xl sm:p-6">
         <h2 className="text-gray-500 text-sm mb-2">HELLO!</h2>
         <h1 className="text-3xl text-black font-bold mb-6">
           {user.displayName?.split(" ")[0] || "User"},{" "}
@@ -502,7 +502,7 @@ const SandboxDashboard: React.FC = () => {
         </div>
       </main>
 
-      <footer className="p-6">
+      <footer className="p-6 max-w-2xl w-full">
         {ideas.length > 0 && (
           <button
             onClick={() => {
