@@ -17,7 +17,17 @@ import "./sandbox.scss";
 const SandboxDashboard: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [ideas, setIdeas] = useState<Idea[]>([]);
-  const [user, loading, setUser] = useAuthState();
+  const [user, appLoading, setUser] = useAuthState();
+  const [isFetching, setIsFetching] = useState(true);
+
+  useEffect(() => {
+    if (appLoading) {
+      const timer = setTimeout(() => {
+        setIsFetching(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const [isIdeaModalActive, setIdeaModalActive] = useState(false);
 
@@ -48,7 +58,8 @@ const SandboxDashboard: React.FC = () => {
     }
   };
 
-  if (loading) {
+  if (appLoading) {
+    console.log("App Loading");
     return (
       <div className="flex items-center justify-center h-screen">
         <p>Loading...</p>
@@ -104,7 +115,77 @@ const SandboxDashboard: React.FC = () => {
             ideas.length == 0 && `bg-none shadow-none`
           } bg-white rounded-2xl shadow-md p-6`}
         >
-          {ideas.length > 0 ? (
+          {isFetching ? (
+            <div className="flex flex-col">
+              <div className="flex flex-col gap-2">
+                <span className="h-5 rounded-xl bg-gray-200 opacity-60 skeleton"></span>
+                <span className="h-5 rounded-xl bg-gray-200 opacity-60 skeleton w-4/5"></span>
+              </div>
+              <hr className="my-7" />
+              <div className="flex flex-col gap-2">
+                <span className="h-5 rounded-xl bg-gray-200 opacity-60 skeleton"></span>
+                <span className="h-5 rounded-xl bg-gray-200 opacity-60 skeleton w-4/5"></span>
+              </div>
+              <hr className="my-7" />
+              <div className="flex flex-col gap-2">
+                <span className="h-5 rounded-xl bg-gray-200 opacity-60 skeleton"></span>
+                <span className="h-5 rounded-xl bg-gray-200 opacity-60 skeleton w-4/5"></span>
+              </div>
+            </div>
+          ) : ideas.length > 0 ? (
+            ideas.map((idea, index) => (
+              <div key={idea.id} className="mb-4 last:mb-0">
+                <div className="flex items-start">
+                  <div className="text-5xl font-medium text-gray-300 mr-6 r-grad">
+                    {index + 1 > 5 ? "-" : index + 1}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-base text-black font-semibold">
+                      {idea.title}{" "}
+                      {idea.rating !== undefined &&
+                      idea.rating >= 2 &&
+                      index < 3 ? (
+                        <span className="pl-1 text-orange-500 text-xs">
+                          🔥 {idea.rating.toFixed(1)}
+                        </span>
+                      ) : idea.rating !== 0 ? (
+                        <span className="pl-1 text-gray-400 text-xs">
+                          {idea.rating.toFixed(1)}
+                        </span>
+                      ) : (
+                        <span className="pl-1 text-gray-400 text-xs">
+                          Not rated yet
+                        </span>
+                      )}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {idea.shortDescription}
+                    </p>
+                  </div>
+                </div>
+                {index < ideas.length - 1 && <hr className="my-4" />}
+              </div>
+            ))
+          ) : (
+            <div className="w-full py-6 flex flex-col items-center">
+              <img
+                className="h-[120px] mb-4"
+                src={emptyStateIcon}
+                alt="Empty ideas list"
+              />
+              <p className="text-gray-500 text-center text-sm">
+                Hey, you have no ideas here yet. <br />
+                Put down your ideas, then take actions fast
+              </p>
+              <button
+                onClick={() => setShowModal(true)}
+                className="button w-full mt-6 bg-black text-white py-3 rounded-full font-semibold flex items-center justify-center"
+              >
+                + Add new idea
+              </button>
+            </div>
+          )}
+          {/* {ideas.length > 0 ? (
             ideas.map((idea, index) => (
               <div key={idea.id} className="mb-4 last:mb-0">
                 <div className="flex items-start">
@@ -158,7 +239,7 @@ const SandboxDashboard: React.FC = () => {
             </div>
           ) : (
             <p className="text-gray-500">Loading...</p>
-          )}
+          )} */}
         </div>
       </main>
 

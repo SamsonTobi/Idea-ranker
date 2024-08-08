@@ -52,11 +52,11 @@ import { useEffect, useState } from "react";
     (currentUser: User | null) => void
   ] => {
     const [user, setUser] = useState<StoredUser | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [appLoading, setAppLoading] = useState(true);
   
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        setLoading(true);
+        setAppLoading(true);
         if (currentUser) {
           const userData: StoredUser = {
             uid: currentUser.uid,
@@ -70,11 +70,11 @@ import { useEffect, useState } from "react";
           setUser(null);
           localStorage.removeItem("user");
         }
-        setLoading(false);
+        setAppLoading(false);
       });
   
       return () => unsubscribe();
     }, []);
   
-    return [user, loading, setUser];
+    return [user, appLoading, setUser];
   };

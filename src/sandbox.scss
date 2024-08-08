@@ -10,6 +10,22 @@
   -webkit-text-fill-color: transparent;
 }
 
+//Skelton loader animation 
+.skeleton {
+  background: linear-gradient(to right, #f0f0f0, #e0e0e0, #f0f0f0);
+  background-size: 200% 100%;
+  background-position: left;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
 .gradient-slider {
   -webkit-appearance: none;
   width: 100%;
