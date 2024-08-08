@@ -101,6 +101,7 @@ const BottomSheetIdeaModal: React.FC<{
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    setShowInfo(null);
     const { name, value } = e.target;
     setNewIdea((prev: any) => ({ ...prev, [name]: value }));
   };
@@ -110,19 +111,27 @@ const BottomSheetIdeaModal: React.FC<{
     setNewIdea((prev: any) => ({ ...prev, [name]: parseInt(value) }));
   };
 
-// Code for slider popups
+  // Code for slider popups
   const [showInfo, setShowInfo] = useState<string | null>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    const popupElement = document.getElementById("popup");
+    if (popupElement && !popupElement.contains(event.target as Node)) {
+      setShowInfo(null);
+    }
+  };
+
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const popupElement = document.getElementById('popup');
-      if (popupElement && !popupElement.contains(event.target as Node)) {
-        setShowInfo(null);
-      }
+    const handleOutsideInteraction = (event: MouseEvent) => {
+      handleClickOutside(event);
     };
-  
-    document.addEventListener('mousedown', handleClickOutside);
+
+    document.addEventListener("mousedown", handleOutsideInteraction);
+    document.addEventListener("mouseup", handleOutsideInteraction);
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleOutsideInteraction);
+      document.removeEventListener("mouseup", handleOutsideInteraction);
     };
   }, []);
 
@@ -134,6 +143,7 @@ const BottomSheetIdeaModal: React.FC<{
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShowInfo(null);
     const slider = e.target;
     const value =
       (Number(slider.value) - Number(slider.min)) /
@@ -252,7 +262,10 @@ const BottomSheetIdeaModal: React.FC<{
                             <AlertCircle className="w-4 h-4 mr-1 text-gray-400" />
                             <span className="text-sm text-gray-500">
                               {showInfo === key && (
-                                <div id="popup" className="absolute right-1 top-5 bg-gray-800 text-white p-3 rounded shadow-lg z-10 w-auto">
+                                <div
+                                  id="popup"
+                                  className="absolute right-1 top-5 bg-gray-800 text-white p-3 rounded shadow-lg z-10 w-auto"
+                                >
                                   {ratingDescriptions[key]}
                                 </div>
                               )}
