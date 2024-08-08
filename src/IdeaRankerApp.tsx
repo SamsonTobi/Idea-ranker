@@ -198,7 +198,7 @@ const BottomSheetIdeaModal: React.FC<{
             </div>
 
             <div className="mb-4">
-              <label className="block text-black text-base font-medium mb-1">
+              <label className="block text-gray-700 text-base font-medium mb-1">
                 Name of your idea
               </label>
               <input
@@ -212,7 +212,7 @@ const BottomSheetIdeaModal: React.FC<{
               />
             </div>
             <div className="mb-4">
-              <label className="block text-black text-base font-medium mb-1">
+              <label className="block text-gray-700 text-base font-medium mb-1">
                 Short description
               </label>
               <input
@@ -226,7 +226,7 @@ const BottomSheetIdeaModal: React.FC<{
               />
             </div>
             <div className="mb-1">
-              <label className="block text-black text-base font-medium mb-1">
+              <label className="block text-gray-700 text-base font-medium mb-1">
                 Full description
               </label>
               <textarea
