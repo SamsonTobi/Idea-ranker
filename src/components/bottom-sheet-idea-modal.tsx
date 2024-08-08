@@ -186,6 +186,16 @@ const BottomSheetIdeaModal: React.FC<{
                           .querySelector(".inner-modal")
                           ?.classList.remove("active");
                         onClose();
+                        setNewIdea({
+                          title: "",
+                          shortDescription: "",
+                          fullDescription: "",
+                          rating: 0,
+                          simplicity: 0,
+                          practicality: 0,
+                          appeal: 0,
+                          gutfeeling: 0,
+                        });
                       }}
                       className="absolute top-2 right-5 bg-gray-100 hover:bg-gray-200 rounded-full p-1"
                     >
