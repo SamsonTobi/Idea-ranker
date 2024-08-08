@@ -1,7 +1,8 @@
 import { useSpring, animated, config } from "react-spring";
 import { useDrag } from "@use-gesture/react";
 import { X, Mic, AlertCircle } from "lucide-react";
-import Toast from "./toast.tsx";
+// import Toast from "./toast.tsx";
+import { Toast } from "./toast.tsx";
 import { useState, useRef } from "react";
 import Idea from "./logic/idea.tsx";
 
