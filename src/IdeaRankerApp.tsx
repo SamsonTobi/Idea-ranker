@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { X, Menu, Mic, AlertCircle } from "lucide-react";
 import { initializeApp } from "firebase/app";
 import emptyStateIcon from "./assets/empty-state-illus.png";
@@ -81,21 +81,12 @@ const BottomSheetIdeaModal: React.FC<{
     "Gut feeling",
   ];
 
-  const [modalOpen, setModalOpen] = useState(false);
 
   // Bottom sheet animation
   const [{ y }, api] = useSpring(() => ({
     y: 0,
     config: config.stiff,
   }));
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setModalOpen(true);
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
 
   // Drag binding
   const dragRef = useRef<HTMLDivElement>(null);
@@ -153,7 +144,6 @@ const BottomSheetIdeaModal: React.FC<{
 
     const ideaWithRating = { ...newIdea, rating: roundedRating };
     onSubmit(ideaWithRating);
-    setModalOpen(false);
     onClose();
   };
 
