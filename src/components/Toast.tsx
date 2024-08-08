@@ -15,7 +15,7 @@ const variantIcons: { [key: string]: React.ElementType } = {
   info: Info,
 };
 
-const Toast = ({ variant = 'info', title, description, onClose }: { variant: string, title: string, description: string, onClose: () => void }) => {
+export const Toast = ({ variant = 'info', title, description, onClose }: { variant: string, title: string, description: string, onClose: () => void }) => {
   const Icon = variantIcons[variant];
 
   return (
@@ -37,5 +37,3 @@ const Toast = ({ variant = 'info', title, description, onClose }: { variant: str
     </div>
   );
 };
-
-export default Toast;
