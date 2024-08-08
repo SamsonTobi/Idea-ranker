@@ -185,8 +185,8 @@ const BottomSheetIdeaModal: React.FC<{
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         />
-        <div className="relative">
-            <div className="px-6 relative">
+        <div className="relative overflow-y-auto">
+            <div className="px-6 relative overflow-y-auto">
               <div className="flex">
               <button
                 onClick={onClose}
