@@ -2,7 +2,7 @@ import { useSpring, animated, config } from "react-spring";
 import { useDrag } from "@use-gesture/react";
 import { X, Mic, AlertCircle } from "lucide-react";
 import { Toast } from "./ui/toast.tsx";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Idea from "./logic/idea.tsx";
 
 const BottomSheetIdeaModal: React.FC<{
@@ -68,6 +68,7 @@ const BottomSheetIdeaModal: React.FC<{
       return;
     }
 
+    // Form Validation
     const isFormUnchanged =
       newIdea.title === "" &&
       newIdea.shortDescription === "" &&
@@ -109,6 +110,29 @@ const BottomSheetIdeaModal: React.FC<{
     setNewIdea((prev: any) => ({ ...prev, [name]: parseInt(value) }));
   };
 
+// Code for slider popups
+  const [showInfo, setShowInfo] = useState<string | null>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const popupElement = document.getElementById('popup');
+      if (popupElement && !popupElement.contains(event.target as Node)) {
+        setShowInfo(null);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const ratingDescriptions: { [key: string]: string } = {
+    simplicity: "Can I build my idea?",
+    practicality: "Can you make a business out of it?",
+    appeal: "Will people want it?",
+    gutfeeling: "How confident & excited I feel about it.",
+  };
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const slider = e.target;
     const value =
@@ -120,146 +144,155 @@ const BottomSheetIdeaModal: React.FC<{
 
   return (
     <>
-        {isIdeaModalOpen && (
+      {isIdeaModalOpen && (
         <div
-        className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end modal}`}
-      >
-        <animated.div
-          style={{
-            y,
-            touchAction: "none",
-          }}
-          className="w-full overflow-y-auto"
+          className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-end modal}`}
         >
-          <div
-            className={` ${
-              isActive && "active"
-            } inner-modal bg-white rounded-t-2xl py-6 w-full max-h-[85vh] overflow-y-auto`}
+          <animated.div
+            style={{
+              y,
+              touchAction: "none",
+            }}
+            className="w-full overflow-y-auto"
           >
             <div
-              {...bind()}
-              ref={dragRef}
-              className="w-16 h-1 bg-gray-300 rounded-full mx-auto mt-[-12px] mb-4 cursor-grab"
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-            />
-            <div className="flex flex-col relative mx-auto overflow-y-auto max-w-2xl">
-              <div className="px-6 relative overflow-y-auto w-full">
-                <div className="flex">
-                  <button
-                    onClick={() => {
-                      document
-                        .querySelector(".inner-modal")
-                        ?.classList.remove("active");
-                      onClose();
-                    }}
-                    className="absolute top-2 right-5 bg-gray-100 hover:bg-gray-200 rounded-full p-1"
-                  >
-                    <X className="text-black" size={24} />
-                  </button>
-                  <h2 className="text-2xl text-black font-bold mb-5">New Idea</h2>
+              className={` ${
+                isActive && "active"
+              } inner-modal bg-white rounded-t-2xl py-6 w-full max-h-[85vh] overflow-y-auto`}
+            >
+              <div
+                {...bind()}
+                ref={dragRef}
+                className="w-16 h-1 bg-gray-300 rounded-full mx-auto mt-[-12px] mb-4 cursor-grab"
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+              />
+              <div className="flex flex-col relative mx-auto overflow-y-auto max-w-2xl">
+                <div className="px-6 relative overflow-y-auto w-full">
+                  <div className="flex">
+                    <button
+                      onClick={() => {
+                        document
+                          .querySelector(".inner-modal")
+                          ?.classList.remove("active");
+                        onClose();
+                      }}
+                      className="absolute top-2 right-5 bg-gray-100 hover:bg-gray-200 rounded-full p-1"
+                    >
+                      <X className="text-black" size={24} />
+                    </button>
+                    <h2 className="text-2xl text-black font-bold mb-5">
+                      New Idea
+                    </h2>
+                  </div>
+
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-[15px] font-medium mb-1">
+                      Name of your idea
+                    </label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={newIdea.title}
+                      onChange={handleInputChange}
+                      className="w-full p-2 text-black bg-gray-100 rounded-lg"
+                      placeholder="Idea ranker, email sender e.t.c"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-[15px] font-medium mb-1">
+                      Short description
+                    </label>
+                    <input
+                      type="text"
+                      name="shortDescription"
+                      value={newIdea.shortDescription}
+                      onChange={handleInputChange}
+                      className="w-full p-2 text-black bg-gray-100 rounded-lg"
+                      placeholder="A short pitch to potential users"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-[15px] font-medium mb-1">
+                      Full description
+                    </label>
+                    <textarea
+                      name="fullDescription"
+                      value={newIdea.fullDescription}
+                      onChange={handleInputChange}
+                      className="w-full p-2 bg-gray-100 text-black rounded-lg"
+                      placeholder="Write notes about the details of your idea here...."
+                      rows={3}
+                      required
+                    />
+                  </div>
+                  <div className="mb-6 flex items-center">
+                    <Mic className="mr-1 text-black text-sm " />
+                    <span className="text-[15px] text-black font-medium border-b-2 border-dotted border-gray-600">
+                      or record a voice note
+                    </span>
+                  </div>
                 </div>
-  
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-[15px] font-medium mb-1">
-                    Name of your idea
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={newIdea.title}
-                    onChange={handleInputChange}
-                    className="w-full p-2 text-black bg-gray-100 rounded-lg"
-                    placeholder="Idea ranker, email sender e.t.c"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-[15px] font-medium mb-1">
-                    Short description
-                  </label>
-                  <input
-                    type="text"
-                    name="shortDescription"
-                    value={newIdea.shortDescription}
-                    onChange={handleInputChange}
-                    className="w-full p-2 text-black bg-gray-100 rounded-lg"
-                    placeholder="A short pitch to potential users"
-                    required
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-[15px] font-medium mb-1">
-                    Full description
-                  </label>
-                  <textarea
-                    name="fullDescription"
-                    value={newIdea.fullDescription}
-                    onChange={handleInputChange}
-                    className="w-full p-2 bg-gray-100 text-black rounded-lg"
-                    placeholder="Write notes about the details of your idea here...."
-                    rows={3}
-                    required
-                  />
-                </div>
-                <div className="mb-6 flex items-center">
-                  <Mic className="mr-1 text-black text-sm " />
-                  <span className="text-[15px] text-black font-medium border-b-2 border-dotted border-gray-600">
-                    or record a voice note
-                  </span>
-                </div>
-              </div>
-              <hr className="mb-6" />
-              <div className="px-6 overflow-y-auto w-full">
-                {ratingAttributes.map((label) => {
-                  const key = label.toLowerCase().replace(" ", "");
-                  return (
-                    <div key={key} className="mb-6">
-                      <div className="flex justify-between items-center">
-                        <label className="text text-black font-medium">
-                          {label}
-                        </label>
-                        <div className="flex items-center">
-                          <AlertCircle className="w-4 h-4 mr-1 text-gray-400" />
-                          <span className="text-sm text-gray-500">
-                            What is this?
-                          </span>
+                <hr className="mb-6" />
+                <div className="px-6 overflow-y-auto w-full">
+                  {ratingAttributes.map((label) => {
+                    const key = label.toLowerCase().replace(" ", "");
+                    return (
+                      <div key={key} className="mb-6 relative">
+                        <div className="flex justify-between items-center">
+                          <label className="text text-black font-medium">
+                            {label}
+                          </label>
+                          <div
+                            className="flex items-center"
+                            onClick={() => setShowInfo(key)}
+                          >
+                            <AlertCircle className="w-4 h-4 mr-1 text-gray-400" />
+                            <span className="text-sm text-gray-500">
+                              {showInfo === key && (
+                                <div id="popup" className="absolute right-1 top-5 bg-gray-800 text-white p-3 rounded shadow-lg z-10 w-auto">
+                                  {ratingDescriptions[key]}
+                                </div>
+                              )}
+                              What is this?
+                            </span>
+                          </div>
                         </div>
+                        <input
+                          type="range"
+                          name={key}
+                          value={newIdea[key as keyof Idea] || 0}
+                          onChange={handleRangeChange}
+                          className="w-full gradient-slider"
+                          min="0"
+                          max="100"
+                          onInput={handleInput}
+                        />
                       </div>
-                      <input
-                        type="range"
-                        name={key}
-                        value={newIdea[key as keyof Idea] || 0}
-                        onChange={handleRangeChange}
-                        className="w-full gradient-slider"
-                        min="0"
-                        max="100"
-                        onInput={handleInput}
-                      />
-                    </div>
-                  );
-                })}
-                <button
-                  onClick={handleSubmit}
-                  className="button w-full bg-black text-white py-3 rounded-full font-semibold mt-4"
-                >
-                  + Add new idea
-                </button>
+                    );
+                  })}
+                  <button
+                    onClick={handleSubmit}
+                    className="button w-full bg-black text-white py-3 rounded-full font-semibold mt-4"
+                  >
+                    + Add new idea
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </animated.div>
-        {showToast && (
-          <Toast
-            variant="destructive"
-            title="Error"
-            description={toastMessage}
-            onClose={() => setShowToast(false)}
-          />
-        )}
-      </div>
-        
-        )}
+          </animated.div>
+          {showToast && (
+            <Toast
+              variant="destructive"
+              title="Error"
+              description={toastMessage}
+              onClose={() => setShowToast(false)}
+            />
+          )}
+        </div>
+      )}
     </>
   );
 };
