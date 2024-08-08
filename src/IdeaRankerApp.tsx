@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 
 import emptyStateIcon from "./assets/empty-state-illus.png";
-import { signInWithGoogle, useAuthState, handleSignOut } from "./components/logic/auth/auth.tsx";
+import {
+  signInWithGoogle,
+  useAuthState,
+  handleSignOut,
+} from "./components/logic/auth/auth.tsx";
 import { fetchIdeas, addNewIdea } from "./components/logic/idea-utils.tsx";
 
 import Idea from "./components/logic/idea.tsx";
-import BottomSheetIdeaModal from "./components/bottom-sheet-idea-modal.tsx"
+import BottomSheetIdeaModal from "./components/bottom-sheet-idea-modal.tsx";
 
 import "./sandbox.scss";
 
@@ -14,6 +18,19 @@ const SandboxDashboard: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [user, loading, setUser] = useAuthState();
+
+  const [isIdeaModalActive, setIdeaModalActive] = useState(false);
+
+  useEffect(() => {
+    if (showModal) {
+      const timer = setTimeout(() => {
+        setIdeaModalActive(true);
+      }, 0);
+      return () => clearTimeout(timer);
+    } else {
+      setIdeaModalActive(false);
+    }
+  }, [showModal]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -30,7 +47,6 @@ const SandboxDashboard: React.FC = () => {
       setShowModal(false);
     }
   };
-
 
   if (loading) {
     return (
@@ -159,12 +175,17 @@ const SandboxDashboard: React.FC = () => {
         )}
       </footer>
 
-      {showModal && (
-        <BottomSheetIdeaModal
-          onClose={() => setShowModal(false)}
-          onSubmit={addNewIdeaHandler}
-        />
-      )}
+      <BottomSheetIdeaModal
+        isIdeaModalOpen={showModal}
+        onClose={() => {
+          setTimeout(() => {
+            setIdeaModalActive(false);
+            setShowModal(false);
+          }, 400);
+        }}
+        onSubmit={addNewIdeaHandler}
+        isActive={isIdeaModalActive}
+      />
     </div>
   );
 };
