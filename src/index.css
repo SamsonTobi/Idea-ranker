@@ -33,16 +33,6 @@
   font-weight: 900;
 }
 
-.inner-modal {
-  transition: all 0.6s cubic-bezier(0.77, 0, 0.19, 1);
-  transform: translateY(100%);
-}
-
-.inner-modal.active{
-  transform: translateY(0);
-}
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;

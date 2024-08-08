@@ -108,7 +108,7 @@ const SandboxDashboard: React.FC = () => {
             ideas.map((idea, index) => (
               <div key={idea.id} className="mb-4 last:mb-0">
                 <div className="flex items-start">
-                  <div className="text-5xl font-medium text-gray-300 mr-4">
+                  <div className="text-5xl font-medium text-gray-300 mr-6 r-grad">
                     {index + 1 > 5 ? "-" : index + 1}
                   </div>
                   <div className="flex-1">
