@@ -185,9 +185,9 @@ const BottomSheetIdeaModal: React.FC<{
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         />
-        <div className="relative overflow-y-auto">
-            <div className="px-6 relative overflow-y-auto">
-              <div className="flex">
+        <div className="flex flex-col relative mx-auto overflow-y-auto max-w-2xl">
+          <div className="px-6 relative overflow-y-auto w-full">
+            <div className="flex">
               <button
                 onClick={onClose}
                 className="absolute top-2 right-5 bg-gray-100 hover:bg-gray-200 rounded-full p-1"
@@ -195,59 +195,59 @@ const BottomSheetIdeaModal: React.FC<{
                 <X className="text-black" size={24} />
               </button>
               <h2 className="text-2xl text-black font-bold mb-5">New Idea</h2>
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-black text-base font-medium mb-1">
-                  Name of your idea
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={newIdea.title}
-                  onChange={handleInputChange}
-                  className="w-full p-2 text-black bg-gray-100 rounded-lg"
-                  placeholder="Idea ranker, email sender e.t.c"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-black text-base font-medium mb-1">
-                  Short description
-                </label>
-                <input
-                  type="text"
-                  name="shortDescription"
-                  value={newIdea.shortDescription}
-                  onChange={handleInputChange}
-                  className="w-full p-2 text-black bg-gray-100 rounded-lg"
-                  placeholder="A short pitch to potential users"
-                  required
-                />
-              </div>
-              <div className="mb-1">
-                <label className="block text-black text-base font-medium mb-1">
-                  Full description
-                </label>
-                <textarea
-                  name="fullDescription"
-                  value={newIdea.fullDescription}
-                  onChange={handleInputChange}
-                  className="w-full p-2 bg-gray-100 text-black rounded-lg"
-                  placeholder="Write notes about the details of your idea here...."
-                  rows={3}
-                  required
-                />
-              </div>
-              <div className="mb-4 flex items-center">
-                <Mic className="mr-1 text-black text-sm " />
-                <span className="text-sm text-black font-medium">
-                  or record a voice note
-                </span>
-              </div>
             </div>
-            <hr className="mb-4" />
-            <div className="px-6 overflow-y-auto">
+
+            <div className="mb-4">
+              <label className="block text-black text-base font-medium mb-1">
+                Name of your idea
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={newIdea.title}
+                onChange={handleInputChange}
+                className="w-full p-2 text-black bg-gray-100 rounded-lg"
+                placeholder="Idea ranker, email sender e.t.c"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-black text-base font-medium mb-1">
+                Short description
+              </label>
+              <input
+                type="text"
+                name="shortDescription"
+                value={newIdea.shortDescription}
+                onChange={handleInputChange}
+                className="w-full p-2 text-black bg-gray-100 rounded-lg"
+                placeholder="A short pitch to potential users"
+                required
+              />
+            </div>
+            <div className="mb-1">
+              <label className="block text-black text-base font-medium mb-1">
+                Full description
+              </label>
+              <textarea
+                name="fullDescription"
+                value={newIdea.fullDescription}
+                onChange={handleInputChange}
+                className="w-full p-2 bg-gray-100 text-black rounded-lg"
+                placeholder="Write notes about the details of your idea here...."
+                rows={3}
+                required
+              />
+            </div>
+            <div className="mb-4 flex items-center">
+              <Mic className="mr-1 text-black text-sm " />
+              <span className="text-sm text-black font-medium">
+                or record a voice note
+              </span>
+            </div>
+          </div>
+          <hr className="mb-4" />
+          <div className="px-6 overflow-y-auto w-full">
             {ratingAttributes.map((label) => {
               const key = label.toLowerCase().replace(" ", "");
               return (
@@ -256,7 +256,12 @@ const BottomSheetIdeaModal: React.FC<{
                     <label className="text text-black font-medium">
                       {label}
                     </label>
-                    <AlertCircle className="w-4 h-4 text-gray-400" />
+                    <div className="flex items-center">
+                      <AlertCircle className="w-4 h-4 mr-1 text-gray-400" />
+                      <span className="text-sm text-gray-500">
+                        What is this?
+                      </span>
+                    </div>
                   </div>
                   <input
                     type="range"
@@ -277,7 +282,7 @@ const BottomSheetIdeaModal: React.FC<{
             >
               + Add new idea
             </button>
-            </div>
+          </div>
         </div>
       </animated.div>
       {showToast && (
