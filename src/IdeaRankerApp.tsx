@@ -198,7 +198,7 @@ const BottomSheetIdeaModal: React.FC<{
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 text-base font-medium mb-1">
+              <label className="block text-gray-700 text-[15px] font-medium mb-1">
                 Name of your idea
               </label>
               <input
@@ -212,7 +212,7 @@ const BottomSheetIdeaModal: React.FC<{
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-base font-medium mb-1">
+              <label className="block text-gray-700 text-[15px] font-medium mb-1">
                 Short description
               </label>
               <input
@@ -225,8 +225,8 @@ const BottomSheetIdeaModal: React.FC<{
                 required
               />
             </div>
-            <div className="mb-1">
-              <label className="block text-gray-700 text-base font-medium mb-1">
+            <div className="mb-4">
+              <label className="block text-gray-700 text-[15px] font-medium mb-1">
                 Full description
               </label>
               <textarea
@@ -239,19 +239,19 @@ const BottomSheetIdeaModal: React.FC<{
                 required
               />
             </div>
-            <div className="mb-4 flex items-center">
+            <div className="mb-6 flex items-center">
               <Mic className="mr-1 text-black text-sm " />
-              <span className="text-sm text-black font-medium">
+              <span className="text-[15px] text-black font-medium">
                 or record a voice note
               </span>
             </div>
           </div>
-          <hr className="mb-4" />
+          <hr className="mb-6" />
           <div className="px-6 overflow-y-auto w-full">
             {ratingAttributes.map((label) => {
               const key = label.toLowerCase().replace(" ", "");
               return (
-                <div key={key} className="mb-4">
+                <div key={key} className="mb-6">
                   <div className="flex justify-between items-center">
                     <label className="text text-black font-medium">
                       {label}
