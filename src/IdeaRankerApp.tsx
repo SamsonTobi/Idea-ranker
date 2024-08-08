@@ -176,7 +176,7 @@ const BottomSheetIdeaModal: React.FC<{
           y,
           touchAction: "none",
         }}
-        className="bg-white rounded-t-2xl py-6 w-full max-h-[80vh] overflow-y-auto modal-inner bgr"
+        className="bg-white rounded-t-2xl py-6 w-full max-h-[85vh] overflow-y-auto modal-inner bgr"
       >
         <div
           {...bind()}
@@ -186,15 +186,16 @@ const BottomSheetIdeaModal: React.FC<{
           onTouchStart={(e) => e.stopPropagation()}
         />
         <div className="relative">
-          <div className="relative">
             <div className="px-6 relative">
+              <div className="flex">
               <button
                 onClick={onClose}
-                className="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200 rounded-full p-1"
+                className="absolute top-2 right-5 bg-gray-100 hover:bg-gray-200 rounded-full p-1"
               >
                 <X className="text-black" size={24} />
               </button>
-              <h2 className="text-3xl text-black font-bold mb-5">New Idea</h2>
+              <h2 className="text-2xl text-black font-bold mb-5">New Idea</h2>
+              </div>
 
               <div className="mb-4">
                 <label className="block text-black text-base font-medium mb-1">
@@ -277,7 +278,6 @@ const BottomSheetIdeaModal: React.FC<{
               + Add new idea
             </button>
             </div>
-          </div>
         </div>
       </animated.div>
       {showToast && (
