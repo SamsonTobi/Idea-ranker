@@ -247,7 +247,7 @@ const BottomSheetIdeaModal: React.FC<{
               </div>
             </div>
             <hr className="mb-4" />
-            <div className="px-6">
+            <div className="px-6 overflow-y-auto">
             {ratingAttributes.map((label) => {
               const key = label.toLowerCase().replace(" ", "");
               return (
