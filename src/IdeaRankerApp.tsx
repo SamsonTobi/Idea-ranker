@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
+import sandBox from "./assets/sandbox-logo.png";
 
 import emptyStateIcon from "./assets/empty-state-illus.png";
 import {
@@ -69,7 +70,8 @@ const SandboxDashboard: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center h-screen">
+        <img src={sandBox} alt="Welcome to sandBox" className="h-[60px] mb-7"/>
         <button
           onClick={signInWithGoogle}
           className="bg-blue-500 text-white px-4 py-2 rounded"
