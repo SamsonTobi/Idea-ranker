@@ -177,7 +177,7 @@ const BottomSheetIdeaModal: React.FC<{
           y,
           touchAction: "none",
         }}
-        className="bg-white rounded-t-2xl p-6 w-full max-h-[90vh] overflow-y-auto modal-inner bgr"
+        className="bg-white rounded-t-2xl p-6 w-full max-h-[80vh] overflow-y-auto modal-inner bgr"
       >
         <div
           {...bind()}
