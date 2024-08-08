@@ -204,7 +204,7 @@ const BottomSheetIdeaModal: React.FC<{
                 </div>
                 <div className="mb-6 flex items-center">
                   <Mic className="mr-1 text-black text-sm " />
-                  <span className="text-[15px] text-black font-medium">
+                  <span className="text-[15px] text-black font-medium border-b-2 border-dotted border-gray-600">
                     or record a voice note
                   </span>
                 </div>

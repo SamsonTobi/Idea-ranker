@@ -102,7 +102,7 @@ const SandboxDashboard: React.FC = () => {
         <div
           className={` ${
             ideas.length == 0 && `bg-none shadow-none`
-          } bg-white rounded-2xl shadow-md p-6`}
+          } bg-white rounded-2xl shadow-md p-6 mb-12`}
         >
           {ideas.length > 0 ? (
             ideas.map((idea, index) => (
@@ -162,7 +162,7 @@ const SandboxDashboard: React.FC = () => {
         </div>
       </main>
 
-      <footer className="p-6 max-w-2xl w-full">
+      <footer className="absolute bottom-0 py-3 px-4 max-w-2xl w-full">
         {ideas.length > 0 && (
           <button
             onClick={() => {
