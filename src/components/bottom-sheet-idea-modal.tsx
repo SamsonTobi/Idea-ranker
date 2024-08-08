@@ -1,6 +1,6 @@
 import { useSpring, animated, config } from "react-spring";
 import { useDrag } from "@use-gesture/react";
-import { X, Mic, AlertCircle } from "lucide-react";
+import { X, Mic, CircleHelp } from "lucide-react";
 import { Toast } from "./ui/toast.tsx";
 import { useState, useRef, useEffect } from "react";
 import Idea from "./logic/idea.tsx";
@@ -136,10 +136,10 @@ const BottomSheetIdeaModal: React.FC<{
   }, []);
 
   const ratingDescriptions: { [key: string]: string } = {
-    simplicity: "Can I build my idea?",
+    simplicity: "How easy is it to build your idea?",
     practicality: "Can you make a business out of it?",
     appeal: "Will people want it?",
-    gutfeeling: "How confident & excited I feel about it.",
+    gutfeeling: "How confident & excited do you feel about it?",
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -259,7 +259,7 @@ const BottomSheetIdeaModal: React.FC<{
                             className="flex items-center"
                             onClick={() => setShowInfo(key)}
                           >
-                            <AlertCircle className="w-4 h-4 mr-1 text-gray-400" />
+                            <CircleHelp className="w-4 h-4 mr-1 text-gray-400" />
                             <span className="text-sm text-gray-500">
                               {showInfo === key && (
                                 <div
@@ -269,7 +269,7 @@ const BottomSheetIdeaModal: React.FC<{
                                   {ratingDescriptions[key]}
                                 </div>
                               )}
-                              What is this?
+                              Learn more
                             </span>
                           </div>
                         </div>
